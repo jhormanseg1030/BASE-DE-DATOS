@@ -8,7 +8,7 @@ INSERT INTO Color(Id_Color,Tipo_Color) VALUES (1,"Amarillo"),(2,"Azul"),(3,"Rojo
 INSERT INTO Cuidad(Id_Cuidad,nomCui) VALUES (1,"Bogota"),(2,"Medellin"),(3,"Cali");
 INSERT INTO Estado_Parqueadero(Id_Estado,TipoEsta) VALUES (1,"Activo"),(2,"Inactivo");
 
-/*Tablas debiles*/
+/*Tablas debiles sapo*/
 
 INSERT INTO Usuarios(Id_Usu,nom,Password,email,apell,num1,num2) VALUES (1,"Juan","123","juan@gmail.com","Lopez","3232332","4242424");
 INSERT INTO Barrio(Id_Barrio,nomBarrio,Id_Cuidad) VALUES (1,"quirigua",2),(2,"Kennedy",1);
