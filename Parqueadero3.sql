@@ -40,7 +40,6 @@ CREATE TABLE Cuidad(
 CREATE TABLE Vehiculo(
 	Id_Veh INT (10) PRIMARY KEY,
     placa VARCHAR(10) NOT NULL UNIQUE,
-    color VARCHAR(20) NOT NULL,
     marca VARCHAR(20) NOT NULL,
     Id_TipVeh INT (10),
     Id_Ticket INT(10),
@@ -84,11 +83,13 @@ CREATE TABLE Ticket (
     Id_Pago INT (10),
     Observaciones INT(30),
     Id_Veh INT (10),
-    horaEnt TIMESTAMP
+    horaEnt TIMESTAMP,
+    horaSali DATETIME
 );
 CREATE TABLE Pago(
 	Id_Pago INT(10) PRIMARY KEY,
 	monto DECIMAL (10,2) NOT NULL,
+    fecha_hora_tick DATETIME,
 	fechPag TIMESTAMP NOT NULL,
     Id_Met INT (10)
 );
@@ -147,5 +148,3 @@ ADD FOREIGN KEY (Id_Color)REFERENCES Color(Id_Color);
 
 
 ALTER TABLE Ticket CHANGE COLUMN Observaciones Recomendaciones Varchar (30);
-
-/*Tablas fuertes*/
