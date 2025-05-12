@@ -41,7 +41,6 @@ CREATE TABLE Vehiculo(
     placa VARCHAR(10) NOT NULL UNIQUE,
     marca VARCHAR(20) NOT NULL,
     Id_TipoVeh INT (10),
-    Id_Ticket INT(10),
     Id_Color INT (10),
     Id_Usu INT (10)
 );
@@ -70,7 +69,7 @@ CREATE TABLE Lugar_Parqueadero(
 
 CREATE TABLE Tip_Parq(
 	Id_Tip_Parq INT (10) PRIMARY KEY,
-    Nom INT (10),
+    nom VARCHAR (50),
 	Valor_Hora DECIMAL (10,2),
 	Valor_Dia DECIMAL (10,2),
 	Valor_Mes DECIMAL (10,2)
@@ -129,9 +128,6 @@ ADD FOREIGN KEY (Id_Tip_Parq) REFERENCES Tip_Parq(Id_Tip_Parq);
 /*Vehiculo*/
 ALTER TABLE Vehiculo
 ADD FOREIGN KEY (Id_TipoVeh) REFERENCES Tipo_Vehiculo(Id_TipoVeh);
-
-ALTER TABLE Vehiculo
-ADD FOREIGN KEY (Id_Ticket) REFERENCES Ticket(Id_Ticket);
 
 ALTER TABLE Vehiculo
 ADD FOREIGN KEY (Id_Color) REFERENCES Color(Id_Color);
