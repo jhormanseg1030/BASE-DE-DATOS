@@ -1,19 +1,13 @@
+CALL Ticket(3, 'Cuide su ticket', 1, 1); 
 
- # estado actual 
-SELECT * FROM Lugar_Parqueadero WHERE Id_Espacio = 1;
+SELECT * FROM Ticket WHERE Id_Ticket = LAST_INSERT_ID(); 
 
-#trigger
-UPDATE Ticket SET horaSali = NOW() WHERE Id_Ticket = 1;
+CALL Salida_Vehiculo(LAST_INSERT_ID(), 'Gracias por visitarnos'); 
 
-#Crea ticket 
-INSERT INTO Ticket (Id_Ticket, Id_Met, Id_Veh, horaEnt, Id_Espacio) 
-VALUES (2, 1, 1, '2024-05-16 09:00:00', 1);
+SELECT * FROM Ticket WHERE Id_Ticket = LAST_INSERT_ID(); 
 
-# llamar procedimiento
-CALL Salida_Vehiculo(2, '2024-05-16 14:00:00', 'Revisar luces');
+SELECT * FROM Lugar_Parqueadero WHERE Id_Espacio = 1; 
 
-#Ticket actualizado
-SELECT * FROM Ticket WHERE Id_Ticket = 2;
 
-#Espacio liberado
-SELECT * FROM Lugar_Parqueadero WHERE Id_Espacio = 1;
+
+

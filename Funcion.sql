@@ -1,19 +1,17 @@
-
 USE `prueba`;
-DROP function IF EXISTS `prueba`.`Valor_Parqueo`;
-;
+DROP function IF EXISTS `Valor_Parqueo`;
+
 
 DELIMITER $$
 USE `prueba`$$
-CREATE DEFINER=`root`@`localhost` FUNCTION `Valor_Parqueo`(Hora_Entrada TIMESTAMP,Hora_Salida DATETIME,Tipo_Parqueadero INT) 
-RETURNS DECIMAL(10,2)
-DETERMINISTIC
+CREATE DEFINER=`root`@`localhost` FUNCTION `Valor_Parqueo`(Hora_Entrada TIMESTAMP,Tipo_Parqueadero INT) RETURNS decimal(10,2)
+    DETERMINISTIC
 BEGIN
     DECLARE Horas_Estadia INT;
     DECLARE Hora DECIMAL(10,2);
     DECLARE Dia DECIMAL(10,2);
     DECLARE Mes DECIMAL(10,2);
-    DECLARE Total DECIMAL(10,2);
+    DECLARE Total DECIMAL(10,2)DEFAULT 0;
     
 	# Tarifas
     SELECT Valor_Hora, Valor_Dia, Valor_Mes 
@@ -22,7 +20,7 @@ BEGIN
     WHERE Id_Tip_Parq = Tipo_Parqueadero;
     
     #Horas de estadía
-    SET Horas_Estadia = TIMESTAMPDIFF(HOUR, Hora_Entrada, Hora_Salida);
+    SET Horas_Estadia = TIMESTAMPDIFF(HOUR, Hora_Entrada,NOW());
     
     # Valor según el tiempo
     IF Horas_Estadia >= 720 THEN
@@ -43,3 +41,4 @@ END$$
 
 DELIMITER ;
 ;
+

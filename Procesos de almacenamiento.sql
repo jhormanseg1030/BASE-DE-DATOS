@@ -129,17 +129,14 @@ DROP procedure IF EXISTS `Ticket`;
 DELIMITER $$
 USE `prueba`$$
 CREATE PROCEDURE `Ticket` (
-	IN Id_Ticket INT,
     IN Id_Met INT,
     IN Recomendaciones VARCHAR (30),
     IN Id_Veh INT,
-    IN horaEnt TIMESTAMP,
-    IN horaSali DATETIME,
     IN Id_Espacio INT
 )
 BEGIN
-	INSERT INTO Ticket (Id_Ticket,Id_Met,Recomendaciones,Id_Veh,horaEnt,horaSali,Id_Espacio)
-    VALUES (Id_Ticket,Id_Met,Recomendaciones,Id_Veh,horaEnt,horaSali,Id_Espacio);
+	INSERT INTO Ticket (Id_Met,Recomendaciones,Id_Veh,Id_Espacio,horaEnt)
+    VALUES (Id_Met,Recomendaciones,Id_Veh,Id_Espacio,NOW());
 END$$
 
 DELIMITER ;
@@ -149,49 +146,49 @@ DELIMITER ;
 
 /*SALIDA DE VEHICULO*/
 
-USE `prueba`;
-DROP procedure IF EXISTS `Salida_Vehiculo`;
-
+DROP PROCEDURE IF EXISTS Salida_Vehiculo;
 DELIMITER $$
-USE `prueba`$$
-CREATE PROCEDURE `Salida_Vehiculo` (
-	IN P_Id_Ticket INT,
-	IN P_Hora_Salida DATETIME,
+CREATE PROCEDURE Salida_Vehiculo (
+    IN P_Id_Ticket INT,
     IN P_recomendaciones VARCHAR(30)
 )
 BEGIN
-	DECLARE V_Id_Espacio INT;
+    DECLARE V_Id_Espacio INT;
     DECLARE V_Id_Tip_Parq INT;
     DECLARE V_Hora_Entrada TIMESTAMP;
-    DECLARE V_Pagar DECIMAL (10,2);
+    DECLARE V_Pagar DECIMAL(10,2);
     
-    # Datos del ticket
+    -- Obtener datos del ticket
     SELECT horaEnt, Id_Espacio INTO V_Hora_Entrada, V_Id_Espacio
     FROM Ticket WHERE Id_Ticket = P_Id_Ticket;
-
     
-    #Tipo de parqueadero :3
-	SELECT Id_Tip_Parq INTO V_Id_Tip_Parq
+    -- Obtener tipo de parqueadero
+    SELECT Id_Tip_Parq INTO V_Id_Tip_Parq
     FROM Lugar_Parqueadero
     WHERE Id_Espacio = V_Id_Espacio;
     
-    #Calcular valor que esta en la funcion :3
-	SET V_Pagar = Valor_Parqueo (V_Hora_Entrada, P_Hora_Salida, V_Id_Tip_Parq);
+    -- Calcular valor a pagar
+    SET V_Pagar = Valor_Parqueo(V_Hora_Entrada, V_Id_Tip_Parq);
     
-    # Actualizar ticket que es salida, recomendaciones, y valor
-    UPDATE Ticket 
-    SET HoraSali = P_Hora_Salida, Recomendaciones = P_Recomendaciones
-    WHERE Id_Ticket = p_Id_Ticket;
+    -- Actualizar ticket: hora de salida y recomendaciones
+    UPDATE Ticket
+    SET horaSali = NOW(),
+        Recomendaciones = P_recomendaciones
+    WHERE Id_Ticket = P_Id_Ticket;
     
-    #Lo que se debe mostrar
-	SELECT 
-	P_Id_Ticket AS 'Ticket N°',
-	V_Hora_Entrada AS 'Hora Entrada',
-	P_Hora_Salida AS 'Hora Salida',
-	V_Pagar AS 'Valor a Pagar',
-	'Salida registrada correctamente' AS 'Mensaje';
+    -- Actualizar lugar parqueadero a disponible
+    UPDATE Lugar_Parqueadero
+    SET Estado = 'Disponible'
+    WHERE Id_Espacio = V_Id_Espacio;
     
+    -- Mostrar resumen
+    SELECT
+        P_Id_Ticket AS 'Ticket N°',
+        V_Hora_Entrada AS 'Hora Entrada',
+        NOW() AS 'Hora Salida',
+        V_Pagar AS 'Valor a Pagar',
+        'Salida registrada correctamente' AS Mensaje;
 END$$
-
 DELIMITER ;
+
 

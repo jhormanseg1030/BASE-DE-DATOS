@@ -76,12 +76,10 @@ CREATE TABLE Tip_Parq(
 );
 
 CREATE TABLE Ticket (
-	Id_Ticket INT(10) PRIMARY KEY,
+	Id_Ticket INT(10) PRIMARY KEY  AUTO_INCREMENT,
     Id_Met INT (10),
     Observaciones INT(30),
     Id_Veh INT (10),
-    horaEnt TIMESTAMP,
-    horaSali DATETIME,
     Id_Espacio INT (10)
 );
 CREATE TABLE Metodo_de_pago(
@@ -147,3 +145,9 @@ ALTER TABLE Ticket
 ADD FOREIGN KEY (Id_Espacio) REFERENCES Lugar_Parqueadero(Id_Espacio);
 
 ALTER TABLE Ticket CHANGE COLUMN Observaciones Recomendaciones Varchar (30);
+
+ALTER TABLE Ticket
+ADD COLUMN horaEnt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ADD COLUMN horaSali TIMESTAMP NULL;
+
+
