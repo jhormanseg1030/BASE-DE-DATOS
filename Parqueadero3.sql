@@ -62,7 +62,7 @@ CREATE TABLE Parqueadero(
 CREATE TABLE Lugar_Parqueadero(
 	Id_Espacio INT(10) PRIMARY KEY,
     cod VARCHAR (10) UNIQUE,
-    Estado BIT,
+    Estado VARCHAR (20),
     Id_Parq INT (10),
     Id_Tip_Parq INT (10)
 );
