@@ -146,9 +146,12 @@ DELIMITER ;
 
 /*SALIDA DE VEHICULO*/
 
-DROP PROCEDURE IF EXISTS Salida_Vehiculo;
+USE `prueba`;
+DROP procedure IF EXISTS `Salida_Vehiculo`;
+
 DELIMITER $$
-CREATE PROCEDURE Salida_Vehiculo (
+USE `prueba`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Salida_Vehiculo`(
     IN P_Id_Ticket INT,
     IN P_recomendaciones VARCHAR(30)
 )
@@ -186,9 +189,42 @@ BEGIN
         P_Id_Ticket AS 'Ticket N°',
         V_Hora_Entrada AS 'Hora Entrada',
         NOW() AS 'Hora Salida',
-        V_Pagar AS 'Valor a Pagar',
+        V_Pagar AS 'Pagar',
         'Salida registrada correctamente' AS Mensaje;
 END$$
-DELIMITER ;
 
+DELIMITER ;
+;
+
+/*Entrada Vehiculo*/
+
+USE `prueba`;
+DROP procedure IF EXISTS `Entrada_Vehiculo`;
+
+DELIMITER $$
+USE `prueba`$$
+CREATE PROCEDURE `Entrada_Vehiculo` (
+	IN P_Id_Vehiculo INT, 
+    IN P_Id_Parqueadero INT,
+    IN P_Id_Espacio INT,
+    IN P_Observaciones VARCHAR (30)
+)
+BEGIN
+	DECLARE Cupo BOOLEAN;
+    SET Cupo = Espacio_Disponible (P_Id_Parqueadero);
+    
+    IF Cupo THEN 
+    INSERT INTO Ticket (Id_Ticket,Id_Veh,horaEnt,Id_Espacio,Recomendaciones)
+    VALUES (NULL,P_Id_Vehiculo, NOW(),P_Id_Espacio,P_Observaciones);
+    
+		UPDATE Lugar_Parqueadero SET Estado = "Ocupado" 
+		WHERE Id_Espacio = P_Id_Espacio;
+        SELECT "Vehiculo registrado correctamente" AS Mensaje;
+	ELSE
+		SIGNAL SQLSTATE "45000" 
+        SET MESSAGE_TEXT = "El espacio del parqueadero esta lleno. Vuelve mas tarde :3";
+   END IF;     
+END$$
+
+DELIMITER ;
 

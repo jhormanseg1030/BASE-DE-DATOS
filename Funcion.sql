@@ -20,7 +20,7 @@ BEGIN
     WHERE Id_Tip_Parq = Tipo_Parqueadero;
     
     #Horas de estadía
-    SET Horas_Estadia = TIMESTAMPDIFF(HOUR, Hora_Entrada,NOW());
+    SET Horas_Estadia = TIMESTAMPDIFF(MINUTE, Hora_Entrada,NOW());
     
     # Valor según el tiempo
     IF Horas_Estadia >= 720 THEN
@@ -42,3 +42,27 @@ END$$
 DELIMITER ;
 ;
 
+/*Espacio_Disponible*/
+
+USE `prueba`;
+DROP function IF EXISTS `Espacio_Disponible`;
+
+DELIMITER $$
+USE `prueba`$$
+CREATE FUNCTION `Espacio_Disponible` (P_Id_Parqueadero INT)
+RETURNS BOOLEAN
+DETERMINISTIC
+BEGIN
+	DECLARE Ocupados INT;
+    DECLARE Maximo INT;
+    
+    SELECT COUNT(*) INTO Ocupados FROM Lugar_Parqueadero
+    WHERE Id_Parq = P_Id_Parqueadero AND Estado ="Ocupado";
+    
+    SELECT capacidadTol INTO Maximo FROM Parqueadero 
+    WHERE Id_Parq = P_Id_Parqueadero;
+    
+RETURN (Ocupados < Maximo);
+END$$
+
+DELIMITER ;

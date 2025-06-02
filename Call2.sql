@@ -6,5 +6,5 @@ CALL Vias (3,"Avenida",1);
 CALL Vias (4,"transver",1);
 CALL Direcciones (1,1,"79-48","Sur,88-50");
 CALL Usuarios (1,"Juan","123","juan@gmail.com","Lopez","3232332","4242424",1);
-CALL Vehiculo(1, "GHJ345", "BMW", 3, 6, 1);
+CALL Vehiculo(1,"GHJ345","BMW",3,6,1);
 CALL Lugar_parqueadero (1,"1-1","Activo",1,3);
